@@ -50,7 +50,7 @@ class CustomDataset(Dataset):
             during tests.
     """
 
-    CLASSES = None
+    CLASSES = ('0')
 
     def __init__(self,
                  ann_file,

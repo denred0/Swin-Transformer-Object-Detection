@@ -14,6 +14,9 @@ from mmdet.datasets import (build_dataloader, build_dataset,
                             replace_ImageToTensor)
 from mmdet.utils import get_root_logger
 from mmcv_custom.runner import EpochBasedRunnerAmp
+
+# import apex
+
 try:
     import apex
 except:
@@ -79,13 +82,13 @@ def train_detector(model,
     optimizer = build_optimizer(model, cfg.optimizer)
 
     # use apex fp16 optimizer
-    if cfg.optimizer_config.get("type", None) and cfg.optimizer_config["type"] == "DistOptimizerHook":
-        if cfg.optimizer_config.get("use_fp16", False):
-            model, optimizer = apex.amp.initialize(
-                model.cuda(), optimizer, opt_level="O1")
-            for m in model.modules():
-                if hasattr(m, "fp16_enabled"):
-                    m.fp16_enabled = True
+    # if cfg.optimizer_config.get("type", None) and cfg.optimizer_config["type"] == "DistOptimizerHook":
+    #     if cfg.optimizer_config.get("use_fp16", False):
+    #         model, optimizer = apex.amp.initialize(
+    #             model.cuda(), optimizer, opt_level="O1")
+    #         for m in model.modules():
+    #             if hasattr(m, "fp16_enabled"):
+    #                 m.fp16_enabled = True
 
     # put model on gpus
     if distributed:
