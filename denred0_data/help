@@ -1,0 +1,43 @@
+pip install mmcv-full==1.3.1 -f https://download.openmmlab.com/mmcv/dist/cu110/torch1.7.1/index.html
+
+
+
+python tools/train.py denred0_model/configs/mask_rcnn/mask_rcnn_r50_caffe_c4_1x_coco.py
+
+
+python tools/train.py denred0_model/configs/swin/cascade_mask_rcnn_swin_tiny_patch4_window7_mstrain_480-800_giou_4conv1f_adamw_3x_coco.py
+
+denred0_model/configs/mask_rcnn/mask_rcnn_r50_caffe_c4_1x_coco.py
+
+# single-gpu training
+python tools/train.py <CONFIG_FILE> --cfg-options model.pretrained=<PRETRAIN_MODEL> [model.backbone.use_checkpoint=True] [other optional arguments]
+
+# multi-gpu training
+tools/dist_train.sh <CONFIG_FILE> <GPU_NUM> --cfg-options model.pretrained=<PRETRAIN_MODEL> [model.backbone.use_checkpoint=True] [other optional arguments]
+
+tools/dist_train.sh configs/swin/cascade_mask_rcnn_swin_tiny_patch4_window7_mstrain_480-800_giou_4conv1f_adamw_3x_coco.py 8 --cfg-options model.pretrained=<PRETRAIN_MODEL>
+
+
+
+Forgot to change SyncBN to BN, now i have modified,
+
+
+$ git clone https://github.com/NVIDIA/apex
+$ cd apex
+$ pip install -v --no-cache-dir --global-option="--cpp_ext" --global-option="--cuda_ext" ./
+
+export CUDA_HOME=/usr/local/cuda-11
+export CUDA_HOME=/usr/local/cuda-10.2
+
+
+apex
+python setup.py install
+
+
+sudo rm -rf /usr/lib/cuda
+
+/usr/lib/cuda
+
+python -c "import torch; print(torch.version.cuda)"
+
+sudo apt-get install cuda-toolkit-10-0
