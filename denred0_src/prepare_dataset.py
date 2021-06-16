@@ -5,7 +5,7 @@ if __name__ == '__main__':
 
     # split yolo_dataset on train, val, test
     val_part = 0.2
-    test_part = 0.5
+    test_part = 0
     img_ext = 'jpg'
     data_dir = Path('denred0_data/prepare_dataset')
     create_train_val_test(data_dir=data_dir,

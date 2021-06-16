@@ -2,10 +2,11 @@ import cv2
 import numpy as np
 import csv
 
-from mmdet.apis import init_detector, inference_detector, show_result_pyplot
-from utils import get_all_files_in_folder
+from mmdet.apis import init_detector, inference_detector
 from pathlib import Path
 from tqdm import tqdm
+
+from utils import get_all_files_in_folder
 
 
 def inference(images_dir, output_folder, config_file, checkpoint_file, images_ext, conf_threshold):
@@ -98,13 +99,13 @@ def create_csv():
 
 
 if __name__ == '__main__':
-    config_file = 'denred0_model/configs/swin/cascade_mask_rcnn_swin_tiny_patch4_window7_mstrain_480-800_giou_4conv1f_adamw_3x_coco.py'
-    checkpoint_file = 'work_dirs/cascade_mask_rcnn_swin_tiny_patch4_window7_mstrain_480-800_giou_4conv1f_adamw_3x_coco/epoch_30.pth'
+    config_file = 'denred0_model/configs/swin/mask_rcnn_swin_small_patch4_window7_mstrain_480-800_adamw_3x_coco_resized.py'
+    checkpoint_file = 'work_dirs/mask_rcnn_swin_small_patch4_window7_mstrain_480-800_adamw_3x_coco_resized/epoch_3.pth'
     images_dir = Path('denred0_data/test')
     output_folder = Path('denred0_data/test_result')
     images_ext = ['*.png']
 
-    conf_threshold = 0.3
+    conf_threshold = 0.4
 
     inference(images_dir=images_dir,
               output_folder=output_folder,
@@ -112,3 +113,5 @@ if __name__ == '__main__':
               checkpoint_file=checkpoint_file,
               images_ext=images_ext,
               conf_threshold=conf_threshold)
+
+    create_csv()

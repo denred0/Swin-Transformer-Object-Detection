@@ -8,7 +8,8 @@ from pathlib import Path
 def create_train_val_test(data_dir, val_part=0.2, test_part=0.5, img_ext='jpg'):
     # clear folder
 
-    dataset_folder_name = 'dataset'
+    dataset_dir = Path(data_dir).joinpath('dataset')
+    # dataset_folder_name = 'dataset'
 
     dirpath = Path(data_dir).joinpath('train')
     if dirpath.exists() and dirpath.is_dir():
@@ -27,7 +28,7 @@ def create_train_val_test(data_dir, val_part=0.2, test_part=0.5, img_ext='jpg'):
         shutil.rmtree(dirpath)
     Path(dirpath).mkdir(parents=True, exist_ok=True)
 
-    train_val_files = list(data_dir.rglob('*.' + img_ext))
+    train_val_files = list(dataset_dir.rglob('*.' + img_ext))
 
     train_files, val_test_files = train_test_split(train_val_files, test_size=val_part)
 
@@ -37,19 +38,32 @@ def create_train_val_test(data_dir, val_part=0.2, test_part=0.5, img_ext='jpg'):
         name_txt = file_name + '.txt'
         shutil.copy(name_txt, os.path.join(data_dir, 'train'))
 
-    val_files, test_files = train_test_split(val_test_files, test_size=test_part)
+    if test_part != 0:
+        val_files, test_files = train_test_split(val_test_files, test_size=test_part)
 
-    for name in val_files:
-        shutil.copy(name, os.path.join(data_dir, 'val'))
-        file_name, file_extension = os.path.splitext(name)
-        name_txt = file_name + '.txt'
-        shutil.copy(name_txt, os.path.join(data_dir, 'val'))
+        for name in val_files:
+            shutil.copy(name, os.path.join(data_dir, 'val'))
+            file_name, file_extension = os.path.splitext(name)
+            name_txt = file_name + '.txt'
+            shutil.copy(name_txt, os.path.join(data_dir, 'val'))
 
-    for name in val_files:
-        shutil.copy(name, os.path.join(data_dir, 'test'))
-        file_name, file_extension = os.path.splitext(name)
-        name_txt = file_name + '.txt'
-        shutil.copy(name_txt, os.path.join(data_dir, 'test'))
+        for name in test_files:
+            shutil.copy(name, os.path.join(data_dir, 'test'))
+            file_name, file_extension = os.path.splitext(name)
+            name_txt = file_name + '.txt'
+            shutil.copy(name_txt, os.path.join(data_dir, 'test'))
+    else:
+        for name in val_test_files:
+            shutil.copy(name, os.path.join(data_dir, 'val'))
+            file_name, file_extension = os.path.splitext(name)
+            name_txt = file_name + '.txt'
+            shutil.copy(name_txt, os.path.join(data_dir, 'val'))
+
+        for name in val_test_files:
+            shutil.copy(name, os.path.join(data_dir, 'test'))
+            file_name, file_extension = os.path.splitext(name)
+            name_txt = file_name + '.txt'
+            shutil.copy(name_txt, os.path.join(data_dir, 'test'))
 
 
 if __name__ == '__main__':
@@ -61,9 +75,6 @@ if __name__ == '__main__':
     data_dir = Path('denred0_data/train_test_split')
 
     create_train_val_test(data_dir=data_dir,
-                           val_part=val_part,
-                           test_part=test_part,
-                           img_ext=img_ext)
-
-
-
+                          val_part=val_part,
+                          test_part=test_part,
+                        img_ext=img_ext)

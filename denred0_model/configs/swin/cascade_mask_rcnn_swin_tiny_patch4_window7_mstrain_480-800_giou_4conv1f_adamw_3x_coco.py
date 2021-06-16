@@ -179,7 +179,7 @@ optimizer = dict(_delete_=True, type='AdamW', lr=0.0001, betas=(0.9, 0.999), wei
 lr_config = dict(step=[27, 33])
 runner = dict(type='EpochBasedRunnerAmp', max_epochs=36)
 
-load_from = 'denred0_checkpoints/cascade_mask_rcnn_swin_base_patch4_window7.pth'
+# load_from = 'denred0_checkpoints/cascade_mask_rcnn_swin_base_patch4_window7.pth'
 # 'https://open-mmlab.s3.ap-northeast-2.amazonaws.com/mmdetection/v2.0/mask_rcnn/mask_rcnn_r50_fpn_1x_coco/mask_rcnn_r50_fpn_1x_coco_20200205-d4b0c5d6.pth'
 
 # do not use mmdet version fp16
@@ -192,3 +192,11 @@ optimizer_config = dict(
     bucket_size_mb=-1,
     use_fp16=True,
 )
+
+
+# Difference between resume_from and load_from: resume_from loads both the
+# model weights and optimizer status, and the epoch is also inherited from
+# the specified checkpoint. It is usually used for resuming the training
+# process that is interrupted accidentally. load_from only loads the model
+# weights and the training epoch starts from 0. It is usually used for
+# finetuning.
