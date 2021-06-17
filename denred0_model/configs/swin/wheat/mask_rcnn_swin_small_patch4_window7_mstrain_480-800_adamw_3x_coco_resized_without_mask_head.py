@@ -1,7 +1,7 @@
 _base_ = [
-    '../_base_/models/mask_rcnn_swin_fpn_without_mask_head.py',
-    '../_base_/datasets/coco_instance_resized.py',
-    '../_base_/schedules/schedule_1x.py', '../_base_/default_runtime.py'
+    '../../_base_/models/wheat/mask_rcnn_swin_fpn_without_mask_head.py',
+    '../../_base_/datasets/wheat/coco_instance_resized.py',
+    '../../_base_/schedules/wheat/schedule_1x.py', '../../_base_/default_runtime.py'
 ]
 
 model = dict(
@@ -86,7 +86,7 @@ test_pipeline = [
 
 data = dict(train=dict(pipeline=train_pipeline))
 
-optimizer = dict(_delete_=True, type='AdamW', lr=0.0001, betas=(0.9, 0.999), weight_decay=0.05,
+optimizer = dict(_delete_=True, type='AdamW', lr=0.00005, betas=(0.9, 0.999), weight_decay=0.01,
                  paramwise_cfg=dict(custom_keys={'absolute_pos_embed': dict(decay_mult=0.),
                                                  'relative_position_bias_table': dict(decay_mult=0.),
                                                  'norm': dict(decay_mult=0.)}))
@@ -94,9 +94,9 @@ lr_config = dict(step=[27, 33])
 runner = dict(type='EpochBasedRunnerAmp', max_epochs=12)
 
 evaluation = dict(metric=['bbox'])
-
-load_from = 'denred0_checkpoints/mask_rcnn_swin_small_patch4_window7.pth'
-# resume_from = 'work_dirs/mask_rcnn_swin_small_patch4_window7_mstrain_480-800_adamw_3x_coco_resized/epoch_5.pth'
+work_dir  = './work_dirs/wheat/mask_rcnn_swin_small_patch4_window7_mstrain_480-800_adamw_3x_coco_resized'
+# load_from = 'denred0_checkpoints/mask_rcnn_swin_small_patch4_window7.pth'
+resume_from = 'work_dirs/wheat/mask_rcnn_swin_small_patch4_window7_mstrain_480-800_adamw_3x_coco_resized/epoch_2.pth'
 
 # do not use mmdet version fp16
 fp16 = None

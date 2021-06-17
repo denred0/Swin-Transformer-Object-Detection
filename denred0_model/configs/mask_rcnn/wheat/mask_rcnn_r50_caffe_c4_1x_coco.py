@@ -1,7 +1,7 @@
 _base_ = [
-    '../_base_/models/mask_rcnn_r50_caffe_c4.py',
-    '../_base_/datasets/coco_detection.py',
-    '../_base_/schedules/schedule_1x.py', '../_base_/default_runtime.py'
+    '../_base_/models/wheat/mask_rcnn_r50_caffe_c4.py',
+    '../_base_/datasets/wheat/coco_detection.py',
+    '../_base_/schedules/wheat/schedule_1x.py', '../_base_/default_runtime.py'
 ]
 # use caffe img_norm
 img_norm_cfg = dict(

@@ -1,7 +1,7 @@
 _base_ = [
-    '../_base_/models/mask_rcnn_swin_fpn.py',
-    '../_base_/datasets/coco_instance_resized.py',
-    '../_base_/schedules/schedule_1x.py', '../_base_/default_runtime.py'
+    '../../_base_/models/wheat/mask_rcnn_swin_fpn.py',
+    '../../_base_/datasets/wheat/coco_instance_resized.py',
+    '../../_base_/schedules/wheat/schedule_1x.py', '../../_base_/default_runtime.py'
 ]
 
 model = dict(
@@ -61,15 +61,28 @@ train_pipeline = [
 ]
 data = dict(train=dict(pipeline=train_pipeline))
 
-optimizer = dict(_delete_=True, type='AdamW', lr=0.0001, betas=(0.9, 0.999), weight_decay=0.05,
-                 paramwise_cfg=dict(custom_keys={'absolute_pos_embed': dict(decay_mult=0.),
-                                                 'relative_position_bias_table': dict(decay_mult=0.),
-                                                 'norm': dict(decay_mult=0.)}))
-lr_config = dict(step=[27, 33])
-runner = dict(type='EpochBasedRunnerAmp', max_epochs=12)
+optimizer = dict(type='SGD', lr=0.001, momentum=0.9, weight_decay=0.0001)
+optimizer_config = dict(grad_clip=None)
+# learning policy
+lr_config = dict(
+    policy='step',
+    warmup='linear',
+    warmup_iters=500,
+    warmup_ratio=0.001,
+    step=[7])
+# the max_epochs and step in lr_config need specifically tuned for the customized dataset
+runner = dict(max_epochs=8)
 
-# load_from = 'denred0_checkpoints/mask_rcnn_swin_small_patch4_window7.pth'
-resume_from = 'work_dirs/mask_rcnn_swin_small_patch4_window7_mstrain_480-800_adamw_3x_coco_resized/epoch_5.pth'
+# optimizer = dict(_delete_=True, type='AdamW', lr=0.0001, betas=(0.9, 0.999), weight_decay=0.05,
+#                  paramwise_cfg=dict(custom_keys={'absolute_pos_embed': dict(decay_mult=0.),
+#                                                  'relative_position_bias_table': dict(decay_mult=0.),
+#                                                  'norm': dict(decay_mult=0.)}))
+# lr_config = dict(step=[27, 33])
+# runner = dict(type='EpochBasedRunnerAmp', max_epochs=36)
+
+load_from = 'denred0_checkpoints/mask_rcnn_swin_small_patch4_window7.pth'
+# load_from = 'work_dirs/mask_rcnn_swin_small_patch4_window7_mstrain_480-800_adamw_3x_coco_0/epoch_9.pth'
+# resume_from = None
 
 # do not use mmdet version fp16
 fp16 = None

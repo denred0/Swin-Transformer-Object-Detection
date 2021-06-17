@@ -125,7 +125,7 @@ def create_csv():
 
 
 if __name__ == '__main__':
-    config_file = 'denred0_model/configs/swin/mask_rcnn_swin_small_patch4_window7_mstrain_480-800_adamw_3x_coco_resized_without_mask_head.py'
+    config_file = 'denred0_model/configs/swin/wheat/mask_rcnn_swin_small_patch4_window7_mstrain_480-800_adamw_3x_coco_resized_without_mask_head.py'
     checkpoint_file = 'work_dirs/mask_rcnn_swin_small_patch4_window7_mstrain_480-800_adamw_3x_coco_resized_without_mask_head_old/epoch_12.pth'
 
     # # eval

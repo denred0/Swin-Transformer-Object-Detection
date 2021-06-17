@@ -1,7 +1,7 @@
 _base_ = [
-    '../_base_/models/mask_rcnn_swin_fpn_without_mask_head.py',
-    '../_base_/datasets/coco_instance.py',
-    '../_base_/schedules/schedule_1x.py', '../_base_/default_runtime.py'
+    '../../_base_/models/wheat/mask_rcnn_swin_fpn_without_mask_head.py',
+    '../../_base_/datasets/wheat/coco_instance.py',
+    '../../_base_/schedules/wheat/schedule_1x.py', '../../_base_/default_runtime.py'
 ]
 
 model = dict(
