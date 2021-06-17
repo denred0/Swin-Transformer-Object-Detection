@@ -41,3 +41,13 @@ sudo rm -rf /usr/lib/cuda
 python -c "import torch; print(torch.version.cuda)"
 
 sudo apt-get install cuda-toolkit-10-0
+
+Отключить сегментацию:
+1. в файле конфига dict(type='Collect', keys=['img', 'gt_bboxes', 'gt_labels'])
+и
+train_pipeline = [
+    dict(type='LoadAnnotations', with_bbox=True, with_mask=False),
+и
+evaluation = dict(metric=['bbox'])
+
+2. в файле с базовой моделью закоментируй часть с mask_head
