@@ -25,7 +25,7 @@ def parse_args():
     # parser.add_argument('config', default=config_def, help='train config file path')
 
     # parser.add_argument('config', help='train config file path')
-    parser.add_argument('--work-dir',  help='the dir to save logs and models')
+    parser.add_argument('--work-dir', help='the dir to save logs and models')
     parser.add_argument(
         '--resume-from', help='the checkpoint file to resume from')
     parser.add_argument(
@@ -98,6 +98,7 @@ def main():
 
     config = 'denred0_model/configs/swin/mask_rcnn_swin_small_patch4_window7_mstrain_480-800_adamw_3x_coco_resized_without_mask_head.py'
 
+    # config = 'denred0_model/configs/swin/mask_rcnn_swin_tiny_patch4_window7_mstrain_480-800_adamw_3x_coco.py'
 
     args.gpus = 1
 
