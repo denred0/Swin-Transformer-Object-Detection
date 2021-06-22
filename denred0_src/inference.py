@@ -126,7 +126,7 @@ def create_csv():
 
 if __name__ == '__main__':
     config_file = 'denred0_model/configs/swin/wheat/mask_rcnn_swin_small_patch4_window7_mstrain_480-800_adamw_3x_coco_resized_without_mask_head.py'
-    checkpoint_file = 'work_dirs/mask_rcnn_swin_small_patch4_window7_mstrain_480-800_adamw_3x_coco_resized_without_mask_head_old/epoch_12.pth'
+    checkpoint_file = 'work_dirs/wheat/mask_rcnn_swin_small_patch4_window7_mstrain_480-800_adamw_3x_coco_resized_aug/epoch_6.pth'
 
     # # eval
     # images_dir = Path('denred0_data/eval/img_source')
@@ -142,12 +142,12 @@ if __name__ == '__main__':
 
     conf_threshold = 0.3
 
-    # inference(images_dir=images_dir,
-    #           output_images_folder=output_images_folder,
-    #           output_txt_folder=output_txt_folder,
-    #           config_file=config_file,
-    #           checkpoint_file=checkpoint_file,
-    #           images_ext=images_ext,
-    #           conf_threshold=conf_threshold)
+    inference(images_dir=images_dir,
+              output_images_folder=output_images_folder,
+              output_txt_folder=output_txt_folder,
+              config_file=config_file,
+              checkpoint_file=checkpoint_file,
+              images_ext=images_ext,
+              conf_threshold=conf_threshold)
 
     create_csv()

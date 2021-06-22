@@ -30,38 +30,52 @@ img_norm_cfg = dict(
 
 # augmentation strategy originates from DETR / Sparse RCNN
 train_pipeline = [
-    dict(type='LoadImageFromFile'),
+    dict(type='LoadImageFromFile', to_float32=True),
     dict(type='LoadAnnotations', with_bbox=True, with_mask=False),
     dict(type='RandomFlip', flip_ratio=0.5),
-    dict(type='AutoAugment',
-         policies=[
-             [
-                 dict(type='Resize',
-                      img_scale=[(480, 480), (512, 512), (544, 544), (576, 576),
-                                 (608, 608), (640, 640), (672, 672), (704, 704),
-                                 (736, 736), (768, 768), (800, 800), (832, 832), (864, 864)],
-                      multiscale_mode='value',
-                      keep_ratio=True)
-             ],
-             [
-                 dict(type='Resize',
-                      img_scale=[(400, 400), (500, 500), (600, 600)],
-                      multiscale_mode='value',
-                      keep_ratio=True),
-                 dict(type='RandomCrop',
-                      crop_type='absolute_range',
-                      crop_size=(608, 608),
-                      allow_negative_crop=True),
-                 dict(type='Resize',
-                      img_scale=[(480, 480), (512, 512), (544, 544),
-                                 (576, 576), (608, 608), (640, 640),
-                                 (672, 672), (704, 704), (736, 736),
-                                 (768, 768), (800, 800), (832, 832), (864, 864)],
-                      multiscale_mode='value',
-                      override=True,
-                      keep_ratio=True)
-             ]
-         ]),
+    dict(
+        type='Resize',  # Augmentation pipeline that resize the images and their annotations
+        img_scale=(1024, 1024),  # The largest scale of image
+        keep_ratio=True
+    ),  # whether to keep the ratio between height and width.
+    dict(
+        type='RandomFlip',  # Augmentation pipeline that flip the images and their annotations
+        flip_ratio=0.5),  # The ratio or probability to flip
+    dict(type='PhotoMetricDistortion'),
+    dict(type='RandomCrop',
+         crop_type='absolute_range',
+         crop_size=(608, 608),
+         allow_negative_crop=True),
+
+    # dict(type='AutoAugment',
+    #      policies=[
+    #          [
+    #              dict(type='Resize',
+    #                   img_scale=[(480, 480), (512, 512), (544, 544), (576, 576),
+    #                              (608, 608), (640, 640), (672, 672), (704, 704),
+    #                              (736, 736), (768, 768), (800, 800), (832, 832), (864, 864)],
+    #                   multiscale_mode='value',
+    #                   keep_ratio=True)
+    #          ],
+    #          [
+    #              dict(type='Resize',
+    #                   img_scale=[(400, 400), (500, 500), (600, 600)],
+    #                   multiscale_mode='value',
+    #                   keep_ratio=True),
+    #              dict(type='RandomCrop',
+    #                   crop_type='absolute_range',
+    #                   crop_size=(608, 608),
+    #                   allow_negative_crop=True),
+    #              dict(type='Resize',
+    #                   img_scale=[(480, 480), (512, 512), (544, 544),
+    #                              (576, 576), (608, 608), (640, 640),
+    #                              (672, 672), (704, 704), (736, 736),
+    #                              (768, 768), (800, 800), (832, 832), (864, 864)],
+    #                   multiscale_mode='value',
+    #                   override=True,
+    #                   keep_ratio=True)
+    #          ]
+    #      ]),
     dict(type='Normalize', **img_norm_cfg),
     dict(type='Pad', size_divisor=32),
     dict(type='DefaultFormatBundle'),
@@ -84,9 +98,11 @@ test_pipeline = [
         ])
 ]
 
-data = dict(train=dict(pipeline=train_pipeline))
+data = dict(samples_per_gpu=4,
+            workers_per_gpu=4,
+            train=dict(pipeline=train_pipeline), )
 
-optimizer = dict(_delete_=True, type='AdamW', lr=0.00005, betas=(0.9, 0.999), weight_decay=0.01,
+optimizer = dict(_delete_=True, type='AdamW', lr=0.0001, betas=(0.9, 0.999), weight_decay=0.05,
                  paramwise_cfg=dict(custom_keys={'absolute_pos_embed': dict(decay_mult=0.),
                                                  'relative_position_bias_table': dict(decay_mult=0.),
                                                  'norm': dict(decay_mult=0.)}))
@@ -94,9 +110,9 @@ lr_config = dict(step=[27, 33])
 runner = dict(type='EpochBasedRunnerAmp', max_epochs=12)
 
 evaluation = dict(metric=['bbox'])
-work_dir  = './work_dirs/wheat/mask_rcnn_swin_small_patch4_window7_mstrain_480-800_adamw_3x_coco_resized'
-# load_from = 'denred0_checkpoints/mask_rcnn_swin_small_patch4_window7.pth'
-resume_from = 'work_dirs/wheat/mask_rcnn_swin_small_patch4_window7_mstrain_480-800_adamw_3x_coco_resized/epoch_2.pth'
+work_dir = './work_dirs/wheat/mask_rcnn_swin_small_patch4_window7_mstrain_480-800_adamw_3x_coco_resized_aug'
+load_from = 'denred0_checkpoints/mask_rcnn_swin_small_patch4_window7.pth'
+# resume_from = 'work_dirs/wheat/mask_rcnn_swin_small_patch4_window7_mstrain_480-800_adamw_3x_coco_resized/epoch_2.pth'
 
 # do not use mmdet version fp16
 fp16 = None

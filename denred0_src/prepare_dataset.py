@@ -4,7 +4,7 @@ from train_test_split import *
 if __name__ == '__main__':
 
     # split yolo_dataset on train, val, test
-    val_part = 0.2
+    val_part = 0.4
     test_part = 0
     img_ext = 'jpg'
     data_dir = Path('denred0_data/prepare_dataset')
@@ -20,6 +20,7 @@ if __name__ == '__main__':
         if dir_path.exists() and dir_path.is_dir():
             shutil.rmtree(dir_path)
         Path(dir_path).mkdir(parents=True, exist_ok=True)
+
         image_folder = '/home/vid/hdd/projects/PycharmProjects/Swin-Transformer-Object-Detection/denred0_data/prepare_dataset/' + folder
         path_txt = str(Path(data_dir).joinpath(folder).joinpath('annotations').joinpath(folder + '.txt'))
         replacer(image_folder, path_txt)
